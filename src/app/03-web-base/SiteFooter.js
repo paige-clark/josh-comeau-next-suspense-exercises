@@ -1,10 +1,10 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
-import { getNavLinks } from '@/helpers/web-base-helpers';
+import { getNavLinks } from "@/helpers/web-base-helpers";
 
-async function SiteFooter() {
-  const navLinks = await getNavLinks();
+function SiteFooter() {
+  // const navLinks = await getNavLinks();
 
   return (
     <footer className="site-footer">
@@ -13,8 +13,7 @@ async function SiteFooter() {
           Webzip
         </Link>
         <p className="disclaimer">
-          Copyright © 2099 Webzip Inc. All Rights
-          Reserved.
+          Copyright © 2099 Webzip Inc. All Rights Reserved.
         </p>
       </div>
 
@@ -22,17 +21,9 @@ async function SiteFooter() {
         <div className="col">
           <h2>Navigation</h2>
           <nav>
-            <ol>
-              {navLinks.map(
-                ({ slug, label, href }) => (
-                  <li key={slug}>
-                    <Link href={href}>
-                      {label}
-                    </Link>
-                  </li>
-                )
-              )}
-            </ol>
+            <React.Suspense>
+              <PrimaryNavLinks />
+            </React.Suspense>
           </nav>
         </div>
         <div className="col">
@@ -43,9 +34,7 @@ async function SiteFooter() {
                 <Link href="">Terms of Use</Link>
               </li>
               <li>
-                <Link href="">
-                  Privacy Policy
-                </Link>
+                <Link href="">Privacy Policy</Link>
               </li>
               <li>
                 <Link href="">Contact</Link>
@@ -55,6 +44,20 @@ async function SiteFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+async function PrimaryNavLinks() {
+  const navLinks = await getNavLinks();
+
+  return (
+    <ol>
+      {navLinks.map(({ slug, label, href }) => (
+        <li key={slug}>
+          <Link href={href}>{label}</Link>
+        </li>
+      ))}
+    </ol>
   );
 }
 
